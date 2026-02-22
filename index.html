@@ -23,7 +23,22 @@
       <span class="pill" id="countPill">0 ads</span>
     </div>
   </div>
-</header><div style="margin:30px 0; text-align:center;">
+</header><!-- Ads Grid -->
+<section class="ads-wrap">
+  <div id="adsGrid" class="ads-grid"></div>
+</section>
+
+<!-- Big Video Modal -->
+<div id="adModal" class="ad-modal hidden" role="dialog" aria-modal="true">
+  <div class="ad-modal-backdrop" id="adModalBackdrop"></div>
+
+  <div class="ad-modal-card">
+    <button class="ad-modal-close" id="adModalClose" aria-label="Close">✕</button>
+
+    <video id="adModalVideo" class="ad-modal-video" controls playsinline></video>
+    <div id="adModalTitle" class="ad-modal-title"></div>
+  </div>
+</div><div style="margin:30px 0; text-align:center;">
   <h2>Boca Business #001</h2>
 
   <video 
