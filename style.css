@@ -110,6 +110,7 @@ h1{
   line-height:1.45;
 }
 
+/* GRID: optimized for fast scrolling */
 .grid{
   display:grid;
   gap:12px;
@@ -123,6 +124,8 @@ h1{
   overflow:hidden;
   cursor:pointer;
   transition: transform .08s ease, border-color .08s ease;
+  content-visibility: auto;         /* huge performance win */
+  contain-intrinsic-size: 260px;    /* keeps layout stable while loading */
 }
 .card:hover{
   transform: translateY(-1px);
@@ -144,12 +147,17 @@ h1{
   margin: 0 0 4px 0;
   font-weight: 900;
   font-size: 13px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .desc{
   margin: 0;
   color: var(--muted);
   font-size: 12px;
   line-height: 1.35;
+  height: 2.7em;
+  overflow: hidden;
 }
 
 .footer{
