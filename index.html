@@ -16,11 +16,14 @@
       <p class="sub">
         Free local business ad wall (landscape). Want your business posted? Email your ad and I’ll upload it.
       </p>
+      <p class="sub sub2">
+        Upload files to <b>/media</b> as: <code>slot001.mp4</code> … <code>slot100.mp4</code> (optional poster: <code>slot001.jpg</code>)
+      </p>
     </div>
 
     <div class="right">
-      <a class="btn primary" id="emailBtn" href="#">📩 Send Your Ad (Free)</a>
-      <span class="pill" id="countPill">0 ads</span>
+      <a class="btn primary" id="emailBtn" href="#">Send Your Ad (Free)</a>
+      <span class="pill" id="countPill">0 slots</span>
     </div>
   </div>
 </header>
@@ -34,11 +37,11 @@
     <ul>
       <li>Video: <b>MP4 / MOV</b> (recommended 10–15 seconds, max 20)</li>
       <li>Image: <b>JPG / PNG</b></li>
-      <li>Include: business name + phone + website (optional)</li>
+      <li>Upload naming: <code>media/slot001.mp4</code> … <code>media/slot100.mp4</code></li>
       <li><b>Family-friendly only.</b> Ads are subject to approval and may be removed anytime.</li>
     </ul>
     <p class="note">
-      This page supports the physical Ad Box. Scan the QR on the Ad Box to view this page.
+      Tap a slot to preview. Empty slots show how to name files.
     </p>
   </section>
 
@@ -51,10 +54,10 @@
 
 <!-- Modal -->
 <div class="modal" id="modal" aria-hidden="true">
-  <div class="modalBox" role="dialog" aria-modal="true">
+  <div class="modalBox" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
     <div class="modalHead">
       <div class="modalTitle" id="modalTitle">Ad</div>
-      <button class="closeBtn" id="closeBtn">Close</button>
+      <button class="closeBtn" id="closeBtn" type="button">Close</button>
     </div>
     <div class="modalBody" id="modalBody"></div>
     <div class="modalFoot" id="modalFoot"></div>
