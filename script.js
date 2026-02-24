@@ -14,6 +14,21 @@ const SLOT_PREFIX = "slot"; // slot001, slot002, ...
 const EMPTY_TITLE = "Available Slot";
 const EMPTY_DESC = "Upload your commercial spot to claim this spot.";
 
+// ================== BUSINESS NAMES ==================
+// Add names here. Key is the slot number (1..100).
+// Example: 1: "Bernardo’s Roofing"
+const BUSINESS_BY_SLOT = {
+  1: "Slot #1 Business Name Here",
+  // 2: "Another Business",
+  // 3: "Another Business",
+};
+
+// Optional: short taglines (shows as the small gray description line)
+const TAGLINE_BY_SLOT = {
+  1: "Tap to watch",
+  // 2: "Tap to watch",
+};
+
 // ================== MAILTO ==================
 const subject = encodeURIComponent("Boca Raton Online Ad Submission (Free)");
 const body = encodeURIComponent(
@@ -67,6 +82,15 @@ function slotPath(i, ext) {
   return `${MEDIA_DIR}/${slotName(i)}.${ext}`;
 }
 
+function businessNameForSlot(i) {
+  return BUSINESS_BY_SLOT[i] || `${EMPTY_TITLE} #${pad3(i)}`;
+}
+
+function taglineForSlot(i, isFilled) {
+  if (TAGLINE_BY_SLOT[i]) return TAGLINE_BY_SLOT[i];
+  return isFilled ? "Tap to open" : EMPTY_DESC;
+}
+
 // Check if a file exists using GET (more reliable than HEAD on some hosts/CDNs).
 async function exists(url) {
   try {
@@ -108,8 +132,8 @@ async function resolveSlotMedia(i) {
   for (let i = 1; i <= SLOT_COUNT; i++) {
     const ad = {
       slot: i,
-      business: `${EMPTY_TITLE} #${pad3(i)}`,
-      desc: EMPTY_DESC,
+      business: businessNameForSlot(i),
+      desc: taglineForSlot(i, false),
       phone: "",
       website: "",
       _media: { kind: "empty" }
@@ -120,7 +144,14 @@ async function resolveSlotMedia(i) {
 
     resolveSlotMedia(i).then((media) => {
       ad._media = media;
+
+      // If slot is filled, keep business name but update the description to be "Tap to ..."
+      const filled = media.kind !== "empty";
+      ad.business = businessNameForSlot(i);
+      ad.desc = taglineForSlot(i, filled);
+
       updateCardMedia(card, ad);
+      updateCardText(card, ad);
     });
   }
 })();
@@ -129,6 +160,11 @@ function makeCard(ad) {
   const card = document.createElement("div");
   card.className = "card";
   card.dataset.slot = String(ad.slot);
+
+  // a small "slot #" badge
+  const tag = document.createElement("div");
+  tag.className = "slotTag";
+  tag.textContent = `#${pad3(ad.slot)}`;
 
   const placeholder = document.createElement("div");
   placeholder.className = "thumb empty";
@@ -141,6 +177,7 @@ function makeCard(ad) {
     <p class="desc">${escapeHtml(ad.desc || "")}</p>
   `;
 
+  card.appendChild(tag);
   card.appendChild(placeholder);
   card.appendChild(meta);
 
@@ -148,8 +185,17 @@ function makeCard(ad) {
   return card;
 }
 
+function updateCardText(card, ad) {
+  const biz = card.querySelector(".biz");
+  const desc = card.querySelector(".desc");
+  if (biz) biz.textContent = ad.business || "";
+  if (desc) desc.textContent = ad.desc || "";
+}
+
 function updateCardMedia(card, ad) {
-  const oldMedia = card.firstChild;
+  // Media element is the 2nd child because 1st child is the slotTag now.
+  // Children: [slotTag, media, meta]
+  const oldMedia = card.children[1];
   let mediaEl;
 
   const m = ad._media;
@@ -174,11 +220,6 @@ function updateCardMedia(card, ad) {
     }
 
     mediaEl = v;
-
-    const biz = card.querySelector(".biz");
-    const desc = card.querySelector(".desc");
-    if (biz) biz.textContent = `Commercial Spot #${pad3(ad.slot)}`;
-    if (desc) desc.textContent = "Tap to watch";
   } else if (m.kind === "image") {
     const img = document.createElement("img");
     img.className = "thumb";
@@ -187,11 +228,6 @@ function updateCardMedia(card, ad) {
     img.loading = "lazy";
 
     mediaEl = img;
-
-    const biz = card.querySelector(".biz");
-    const desc = card.querySelector(".desc");
-    if (biz) biz.textContent = `Image Ad #${pad3(ad.slot)}`;
-    if (desc) desc.textContent = "Tap to view";
   } else {
     if (oldMedia && oldMedia.nodeType === 1) {
       oldMedia.textContent = `EMPTY #${pad3(ad.slot)}`;
@@ -204,7 +240,7 @@ function updateCardMedia(card, ad) {
 
 // ================== MODAL ==================
 function openModal(ad) {
-  modalTitle.textContent = `Slot #${pad3(ad.slot)}`;
+  modalTitle.textContent = `${ad.business} (Slot #${pad3(ad.slot)})`;
   modalBody.innerHTML = "";
   modalFoot.innerHTML = "";
 
@@ -229,8 +265,8 @@ function openModal(ad) {
   } else {
     const p = document.createElement("div");
     p.style.padding = "14px";
-    p.style.color = "#a8b3c7";
-    p.style.lineHeight = "1.45";
+    p.style.color = "rgba(234,240,255,.75)";
+    p.style.lineHeight = "1.55";
     p.innerHTML = `
       <b>This slot is empty.</b><br/>
       Upload one of these files to fill it:<br/>
