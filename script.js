@@ -18,7 +18,7 @@ const EMPTY_DESC = "Upload your commercial spot to claim this spot.";
 // Add names here. Key is the slot number (1..100).
 // Example: 1: "Bernardo’s Roofing"
 const BUSINESS_BY_SLOT = {
-  1: "Slot #1 Business Name Here",
+  1: "Skin Wizard",
   // 2: "Another Business",
   // 3: "Another Business",
 };
