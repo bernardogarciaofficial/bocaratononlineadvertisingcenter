@@ -44,6 +44,14 @@ h1{
   font-size:13px;
   line-height:1.35;
 }
+.sub2 code{
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-size: 12px;
+  padding: 1px 6px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: rgba(13,17,23,.6);
+}
 .right{
   display:flex;
   gap:10px;
@@ -110,7 +118,7 @@ h1{
   line-height:1.45;
 }
 
-/* GRID: optimized for fast scrolling */
+/* GRID */
 .grid{
   display:grid;
   gap:12px;
@@ -124,8 +132,8 @@ h1{
   overflow:hidden;
   cursor:pointer;
   transition: transform .08s ease, border-color .08s ease;
-  content-visibility: auto;         /* huge performance win */
-  contain-intrinsic-size: 260px;    /* keeps layout stable while loading */
+  content-visibility: auto;
+  contain-intrinsic-size: 260px;
 }
 .card:hover{
   transform: translateY(-1px);
@@ -138,6 +146,17 @@ h1{
   background: #000;
   display:block;
   object-fit: cover;
+}
+
+/* Empty slot placeholder text look */
+.thumb.empty{
+  display:grid;
+  place-items:center;
+  color: var(--muted);
+  font-weight: 900;
+  font-size: 12px;
+  letter-spacing: .3px;
+  background: linear-gradient(135deg, rgba(255,255,255,.05), rgba(0,0,0,.4));
 }
 
 .meta{
@@ -219,4 +238,9 @@ h1{
   color: var(--muted);
   font-size: 13px;
   border-top: 1px solid var(--border);
+}
+
+/* Small screens */
+@media (max-width: 520px){
+  .grid{ grid-template-columns: 1fr; }
 }
