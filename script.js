@@ -1,222 +1,195 @@
-:root{
-  --bg:#07090c;
-  --panel:#0d1117;
-  --border:#1f2632;
-  --text:#e9eef5;
-  --muted:#a8b3c7;
-  --accent:#2b7cff;
+// ================== SETTINGS ==================
+const EMAIL = "bernardogarciagarcia441@gmail.com"; // <-- change if needed
+
+// ================== MAILTO ==================
+const subject = encodeURIComponent("Boca Raton Online Ad Submission (Free)");
+const body = encodeURIComponent(
+`Business Name:
+Phone:
+Website (optional):
+
+Attach your VIDEO (MP4/MOV) or IMAGE (JPG/PNG) to this email.
+Recommended video length: 10–15 seconds (max 20).`
+);
+const mailto = `mailto:${EMAIL}?subject=${subject}&body=${body}`;
+
+// ================== AD LIST ==================
+// Put files inside /media/
+// Examples:
+//   media/ad001.mp4
+//   media/ad001.jpg  (optional poster)
+// Image-only ad:
+//   { business:"...", image:"media/img001.jpg" }
+
+const ADS = [
+  {
+    business: "Patrocinadores Teleunionlatina",
+    desc: "Commercial Spot",
+    video: "media/patrocinadores_teleunionlatina_02.mp4",
+    poster: "media/patrocinadores_teleunionlatina_02.jpg", // optional
+    phone: "",
+    website: ""
+  },
+
+  // Add more like:
+  // { business:"Boca Business #002", desc:"Commercial Spot", video:"media/ad002.mp4", poster:"media/ad002.jpg" },
+];
+
+// OPTIONAL: If you want 100 slots but only show the ones that exist,
+// leave ADS as your real ads list like above (best & fastest).
+
+// ================== DOM ==================
+document.getElementById("year").textContent = new Date().getFullYear();
+document.getElementById("emailBtn").href = mailto;
+document.getElementById("emailText").textContent = EMAIL;
+
+const grid = document.getElementById("grid");
+const countPill = document.getElementById("countPill");
+
+const modal = document.getElementById("modal");
+const modalTitle = document.getElementById("modalTitle");
+const modalBody = document.getElementById("modalBody");
+const modalFoot = document.getElementById("modalFoot");
+const closeBtn = document.getElementById("closeBtn");
+
+closeBtn.addEventListener("click", closeModal);
+modal.addEventListener("click", (e) => { if (e.target === modal) closeModal(); });
+document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeModal(); });
+
+// ================== HELPERS ==================
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, (m) => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+  }[m]));
 }
 
-*{ box-sizing:border-box; }
-body{
-  margin:0;
-  font-family: Arial, Helvetica, sans-serif;
-  background: var(--bg);
-  color: var(--text);
-}
-a{ color: inherit; }
-
-.wrap{ max-width:1100px; margin:0 auto; padding:16px; }
-
-.topbar{
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  background: rgba(7,9,12,.92);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--border);
-}
-.row{
-  display:flex;
-  gap:12px;
-  align-items:center;
-  justify-content:space-between;
-  flex-wrap:wrap;
-}
-h1{
-  margin:0;
-  font-size:18px;
-  letter-spacing:.3px;
-}
-.sub{
-  margin:6px 0 0 0;
-  color: var(--muted);
-  font-size:13px;
-  line-height:1.35;
-}
-.right{
-  display:flex;
-  gap:10px;
-  align-items:center;
-  flex-wrap:wrap;
+function isDesktopHover() {
+  return window.matchMedia && window.matchMedia("(hover: hover) and (pointer: fine)").matches;
 }
 
-.btn{
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  padding:10px 12px;
-  border-radius:10px;
-  background: var(--panel);
-  border:1px solid var(--border);
-  text-decoration:none;
-  font-weight:900;
-  font-size:13px;
-  color: var(--text);
-}
-.btn.primary{
-  background: var(--accent);
-  border-color: transparent;
-  color:#fff;
+// Check if a file exists (HEAD request). If GitHub blocks HEAD, we fallback to GET.
+// This keeps the page clean (only show real ads).
+async function exists(url) {
+  try {
+    const r = await fetch(url, { method: "HEAD", cache: "no-cache" });
+    if (r.ok) return true;
+  } catch (_) {}
+  try {
+    const r2 = await fetch(url, { method: "GET", cache: "no-cache" });
+    return r2.ok;
+  } catch (_) {
+    return false;
+  }
 }
 
-.pill{
-  display:inline-block;
-  font-size:12px;
-  color: var(--muted);
-  border:1px solid var(--border);
-  border-radius:999px;
-  padding:6px 10px;
-  background: rgba(13,17,23,.6);
+// ================== RENDER ==================
+(async function init() {
+  // Filter: show only ads that actually have a working video OR image
+  const realAds = [];
+  for (const ad of ADS) {
+    if (ad.video && await exists(ad.video)) {
+      realAds.push(ad);
+      continue;
+    }
+    if (ad.image && await exists(ad.image)) {
+      realAds.push(ad);
+      continue;
+    }
+  }
+
+  countPill.textContent = `${realAds.length} ads`;
+
+  grid.innerHTML = "";
+  realAds.forEach((ad) => grid.appendChild(makeCard(ad)));
+})();
+
+function makeCard(ad) {
+  const card = document.createElement("div");
+  card.className = "card";
+
+  let mediaEl;
+
+  if (ad.video) {
+    const v = document.createElement("video");
+    v.className = "thumb";
+    v.src = ad.video;
+    v.muted = true;
+    v.loop = true;
+    v.playsInline = true;
+    v.preload = "metadata";
+    if (ad.poster) v.poster = ad.poster;
+
+    // Smooth thumbnail (show a frame)
+    v.addEventListener("loadedmetadata", () => {
+      try { v.currentTime = 0.1; } catch {}
+    });
+
+    // Hover preview only for desktop
+    if (isDesktopHover()) {
+      card.addEventListener("mouseenter", () => v.play().catch(()=>{}));
+      card.addEventListener("mouseleave", () => { v.pause(); v.currentTime = 0.1; });
+    }
+
+    mediaEl = v;
+  } else {
+    const img = document.createElement("img");
+    img.className = "thumb";
+    img.src = ad.image;
+    img.alt = ad.business || "Ad";
+    img.loading = "lazy";
+    mediaEl = img;
+  }
+
+  const meta = document.createElement("div");
+  meta.className = "meta";
+  meta.innerHTML = `
+    <p class="biz">${escapeHtml(ad.business || "Business")}</p>
+    <p class="desc">${escapeHtml(ad.desc || "")}</p>
+  `;
+
+  card.appendChild(mediaEl);
+  card.appendChild(meta);
+
+  card.addEventListener("click", () => openModal(ad));
+
+  return card;
 }
 
-.info{
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 14px;
-  margin-bottom: 14px;
-}
-.info h2{
-  margin:0 0 6px 0;
-  font-size:14px;
-}
-.info .line{
-  margin: 8px 0;
-  color: var(--muted);
-  font-size:13px;
-  line-height:1.45;
-}
-.info ul{
-  margin: 8px 0 0 18px;
-  color: var(--muted);
-  font-size:13px;
-  line-height:1.45;
-}
-.note{
-  margin-top:10px;
-  color: var(--muted);
-  font-size:13px;
-  line-height:1.45;
+// ================== MODAL ==================
+function openModal(ad) {
+  modalTitle.textContent = ad.business || "Ad";
+  modalBody.innerHTML = "";
+  modalFoot.innerHTML = "";
+
+  if (ad.video) {
+    const v = document.createElement("video");
+    v.controls = true;
+    v.playsInline = true;
+    v.src = ad.video;
+    v.preload = "auto";
+    if (ad.poster) v.poster = ad.poster;
+    modalBody.appendChild(v);
+    v.play().catch(()=>{});
+  } else if (ad.image) {
+    const img = document.createElement("img");
+    img.src = ad.image;
+    img.alt = ad.business || "Ad";
+    modalBody.appendChild(img);
+  } else {
+    modalBody.textContent = "Media not set.";
+  }
+
+  const bits = [];
+  if (ad.phone) bits.push(`Phone: ${ad.phone}`);
+  if (ad.website) bits.push(`Website: ${ad.website}`);
+  modalFoot.textContent = bits.join(" • ");
+
+  modal.classList.add("open");
+  modal.setAttribute("aria-hidden", "false");
 }
 
-/* GRID: optimized for fast scrolling */
-.grid{
-  display:grid;
-  gap:12px;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-}
-
-.card{
-  background: var(--panel);
-  border:1px solid var(--border);
-  border-radius: 14px;
-  overflow:hidden;
-  cursor:pointer;
-  transition: transform .08s ease, border-color .08s ease;
-  content-visibility: auto;         /* huge performance win */
-  contain-intrinsic-size: 260px;    /* keeps layout stable while loading */
-}
-.card:hover{
-  transform: translateY(-1px);
-  border-color: #2a3550;
-}
-
-.thumb{
-  width: 100%;
-  aspect-ratio: 16/9;
-  background: #000;
-  display:block;
-  object-fit: cover;
-}
-
-.meta{
-  padding: 10px 12px;
-}
-.biz{
-  margin: 0 0 4px 0;
-  font-weight: 900;
-  font-size: 13px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.desc{
-  margin: 0;
-  color: var(--muted);
-  font-size: 12px;
-  line-height: 1.35;
-  height: 2.7em;
-  overflow: hidden;
-}
-
-.footer{
-  padding: 18px 16px;
-  color: var(--muted);
-  font-size: 12px;
-  border-top: 1px solid var(--border);
-}
-
-/* Modal */
-.modal{
-  position: fixed;
-  inset: 0;
-  display: none;
-  background: rgba(0,0,0,.78);
-  z-index: 99;
-  padding: 18px;
-}
-.modal.open{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-.modalBox{
-  width: min(980px, 100%);
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  overflow:hidden;
-}
-.modalHead{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding: 12px 14px;
-  border-bottom: 1px solid var(--border);
-  gap: 10px;
-}
-.modalTitle{ font-weight: 900; }
-.closeBtn{
-  background: transparent;
-  border:1px solid var(--border);
-  color: var(--text);
-  border-radius: 10px;
-  padding: 8px 10px;
-  cursor: pointer;
-  font-weight: 900;
-}
-.modalBody video,
-.modalBody img{
-  width: 100%;
-  aspect-ratio: 16/9;
-  background:#000;
-  display:block;
-  object-fit: contain;
-}
-.modalFoot{
-  padding: 10px 14px;
-  color: var(--muted);
-  font-size: 13px;
-  border-top: 1px solid var(--border);
+function closeModal() {
+  modal.classList.remove("open");
+  modal.setAttribute("aria-hidden", "true");
+  modalBody.innerHTML = "";
 }
