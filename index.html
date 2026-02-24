@@ -1,52 +1,66 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Boca Raton Online Advertising Center</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta name="description" content="Free Boca Raton business ad wall. Email your video or image ad to be posted." />
+  <link rel="stylesheet" href="style.css"/>
 </head>
-
 <body>
 
 <header class="topbar">
-  <div class="top-left">
-    <h1>Boca Raton Online Advertising Center</h1>
-    <p>Free local business ad wall (landscape). Want your business posted? Email your ad and I’ll upload it.</p>
-  </div>
+  <div class="wrap row">
+    <div class="left">
+      <h1>Boca Raton Online Advertising Center</h1>
+      <p class="sub">
+        Free local business ad wall (landscape). Want your business posted? Email your ad and I’ll upload it.
+      </p>
+    </div>
 
-  <div class="top-right">
-    <a class="btn-primary" href="mailto:bernardogarcia441@gmail.com">
-      📩 Send Your Ad (Free)
-    </a>
+    <div class="right">
+      <a class="btn primary" id="emailBtn" href="#">📩 Send Your Ad (Free)</a>
+      <span class="pill" id="countPill">0 ads</span>
+    </div>
   </div>
 </header>
 
+<main class="wrap">
+  <section class="info">
+    <h2>How to advertise here (Free)</h2>
+    <p class="line">
+      Email your video ad or image ad to: <b id="emailText">bernardogarciagarcia441@gmail.com</b>
+    </p>
+    <ul>
+      <li>Video: <b>MP4 / MOV</b> (recommended 10–15 seconds, max 20)</li>
+      <li>Image: <b>JPG / PNG</b></li>
+      <li>Include: business name + phone + website (optional)</li>
+      <li><b>Family-friendly only.</b> Ads are subject to approval and may be removed anytime.</li>
+    </ul>
+    <p class="note">
+      This page supports the physical Ad Box. Scan the QR on the Ad Box to view this page.
+    </p>
+  </section>
 
-<!-- Ads Grid -->
-<section class="ads-wrap">
-  <div id="adsGrid" class="ads-grid"></div>
-</section>
+  <section class="grid" id="grid"></section>
+</main>
 
+<footer class="footer wrap">
+  © <span id="year"></span> Boca Raton Online Advertising Center • Built on GitHub Pages
+</footer>
 
-<!-- Big Video Modal -->
-<div id="adModal" class="ad-modal hidden">
-  <div class="ad-modal-backdrop" id="adModalBackdrop"></div>
-
-  <div class="ad-modal-card">
-    <button class="ad-modal-close" id="adModalClose">✕</button>
-
-    <video id="adModalVideo" class="ad-modal-video" controls playsinline></video>
-    <div id="adModalTitle" class="ad-modal-title"></div>
+<!-- Modal -->
+<div class="modal" id="modal" aria-hidden="true">
+  <div class="modalBox" role="dialog" aria-modal="true">
+    <div class="modalHead">
+      <div class="modalTitle" id="modalTitle">Ad</div>
+      <button class="closeBtn" id="closeBtn">Close</button>
+    </div>
+    <div class="modalBody" id="modalBody"></div>
+    <div class="modalFoot" id="modalFoot"></div>
   </div>
 </div>
 
-
-<footer class="footer">
-  © Boca Raton Online Advertising Center • Built on GitHub Pages
-</footer>
-
-<script src="script.js" defer></script>
-
+<script src="script.js"></script>
 </body>
 </html>
