@@ -401,3 +401,18 @@ h1{
   text-transform: uppercase;
   color: rgba(234,240,255,.92);
 }
+/* ===== TOP RIGHT LOGO (BOCA VISITOR GUIDE) ===== */
+.tourLogo{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.tourLogo img{
+  height: 42px;   /* <-- change this number smaller/bigger */
+  width: auto;
+  object-fit: contain;
+  display:block;
+  filter: drop-shadow(0 10px 25px rgba(0,0,0,.45));
+  opacity: .95;
+}
