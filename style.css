@@ -407,7 +407,7 @@ h1{
   align-items:center;
   justify-content:center;
 } .tourLogo img{
-  height: 120px; /* BIG logo */
+  height: 160px; /* BIG statement logo */
   width: auto;
   object-fit: contain;
   display: block;
