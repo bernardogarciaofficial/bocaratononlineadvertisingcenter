@@ -407,10 +407,11 @@ h1{
   align-items:center;
   justify-content:center;
 } .tourLogo img{
-  height: 160px; /* BIG statement logo */
+  height: 220px; /* BIG BOY LOGO */
   width: auto;
   object-fit: contain;
   display: block;
+}
 }<-- change this number smaller/bigger */
   width: auto;
   object-fit: contain;
