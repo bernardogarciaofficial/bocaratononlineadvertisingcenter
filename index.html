@@ -1,85 +1,59 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <meta charset="UTF-8">
   <title>Boca Raton Visitor Guide</title>
-  <meta name="description" content="Free Boca Raton business ad wall. Email your video or image ad to be posted." />
-  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-<header class="topbar">
+<!-- TOP BAR -->
+<div class="topbar">
   <div class="wrap row">
-    
-    <div class="left">
-      <div class="brand">
-        <div class="mark" aria-hidden="true"></div>
-        <div>
-          <h1>Boca Raton Visitor Guide</h1>
-          <p class="sub">
-            A free local business video wall for Boca Raton. Browse 100 ad slots instantly.
-          </p>
+
+    <div class="brand">
+      <div class="mark"></div>
+      <div>
+        <h1>Boca Raton Visitor Guide</h1>
+        <div class="sub">
+          A free local business video wall for Boca Raton.
         </div>
       </div>
     </div>
 
     <div class="right">
-      <div class="tourLogo">
-  <a class="btn primary" id="emailBtn" href="#">Send Your Ad (Free)</a>
-      <span class="pill" id="countPill">100 SLOTS</span>
+      <a class="btn" href="#">Send Your Ad (Free)</a>
+      <div class="pill">100 SLOTS</div>
     </div>
-
-  </div>
-</header><div class="tourLogo">
-        <img src="media/boca-visitor-guide-logo.png" alt="Boca Visitor Guide Logo">
-      </div>
-
-<main class="wrap">
-
-  <section class="info">
-    <h2>How to advertise here (Free)</h2>
-    <p class="line">
-      Email your video ad or image ad to: 
-      <b id="emailText">bernardogarciagarcia441@gmail.com</b>
-    </p>
-
-    <ul>
-      <li>Video: <b>MP4 / MOV</b> (recommended 10–15 seconds, max 20)</li>
-      <li>Image: <b>JPG / PNG</b></li>
-      <li>Upload naming: <code>media/slot001.mp4</code> … <code>media/slot100.mp4</code></li>
-      <li><b>Family-friendly only.</b> Ads are subject to approval and may be removed anytime.</li>
-    </ul>
-
-    <p class="note">
-      Tap a slot to preview. Empty slots show how to name files.
-    </p>
-  </section>
-
-  <section class="grid" id="grid"></section>
-
-</main>
-
-<footer class="footer wrap">
-  © <span id="year"></span> Boca Raton Online Advertising Center • Built on GitHub Pages
-</footer>
-
-<!-- Modal -->
-<div class="modal" id="modal" aria-hidden="true">
-  <div class="modalBox" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-    
-    <div class="modalHead">
-      <div class="modalTitle" id="modalTitle">Ad</div>
-      <button class="closeBtn" id="closeBtn" type="button">Close</button>
-    </div>
-
-    <div class="modalBody" id="modalBody"></div>
-    <div class="modalFoot" id="modalFoot"></div>
 
   </div>
 </div>
 
-<script src="script.js"></script>
+<!-- 🔥 BIG CENTER LOGO -->
+<div class="bigLogo">
+  <img src="media/boca-visitor-guide-logo.png">
+</div>
+
+<!-- INFO -->
+<div class="wrap">
+  <div class="info">
+    <b>HOW TO ADVERTISE HERE (FREE)</b>
+    <ul>
+      <li>Video: MP4 / MOV</li>
+      <li>Image: JPG / PNG</li>
+      <li>Family friendly only</li>
+    </ul>
+  </div>
+
+  <!-- GRID -->
+  <div class="grid">
+    <div class="card">EMPTY #001</div>
+    <div class="card">EMPTY #002</div>
+    <div class="card">EMPTY #003</div>
+    <div class="card">EMPTY #004</div>
+  </div>
+</div>
 
 </body>
 </html>
