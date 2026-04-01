@@ -418,4 +418,15 @@ h1{
   display:block;
   filter: drop-shadow(0 10px 25px rgba(0,0,0,.45));
   opacity: .95;
+}/* ===== BIG CENTER LOGO ===== */
+.bigLogo{
+  display:flex;
+  justify-content:center;
+  margin: 20px 0 10px 0;
+}
+
+.bigLogo img{
+  width: 55%;       /* 🔥 THIS CONTROLS SIZE */
+  max-width: 600px; /* caps size on big screens */
+  height: auto;
 }
