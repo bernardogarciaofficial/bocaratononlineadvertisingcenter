@@ -426,9 +426,6 @@ h1{
   width: 180px;
   height: auto;
 
-  /* 🔥 removes white background look */
-  mix-blend-mode: multiply;
-
-  /* clean shadow */
-  filter: drop-shadow(0 10px 25px rgba(0,0,0,0.3));
+  /* clean glow so it pops */
+  filter: drop-shadow(0 10px 25px rgba(0,0,0,0.4)) brightness(1.2) contrast(1.1);
 }
