@@ -423,8 +423,12 @@ h1{
 }
 
 .bigLogo img{
-  width: 150px;   /* 🔥 THIS MAKES IT BIGGER */
+  width: 180px;
   height: auto;
 
+  /* 🔥 removes white background look */
+  mix-blend-mode: multiply;
+
+  /* clean shadow */
   filter: drop-shadow(0 10px 25px rgba(0,0,0,0.3));
 }
