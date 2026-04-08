@@ -430,7 +430,7 @@ height: 40px;
   filter: drop-shadow(0 10px 25px rgba(0,0,0,0.4)) brightness(1.2) contrast(1.1);
 }/* ===== BRAND LOGO SIZE FIX ===== */
 .brandLogo{
-  width: 175px !important;
-  height: 175px !important;
+  width: 200px !important;
+  height: 200px !important;
   object-fit: contain;
 }
