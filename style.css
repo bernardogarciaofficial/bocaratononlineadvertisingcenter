@@ -358,4 +358,14 @@ body{
   .brandText .sub{
     font-size:11px;
   }
+}.logoCenter{
+  display:flex;
+  justify-content:center;
+  margin-bottom:10px;
+}
+
+.logoCenter img{
+  width:120px;
+  height:auto;
+  object-fit:contain;
 }
