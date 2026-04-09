@@ -72,8 +72,8 @@ body{
   max-width:520px;
 }
 .brandLogo{
-  width:75px;
-  height:75px;
+  width:100px;
+  height:100px;
   object-fit:contain;
   flex-shrink:0;
   filter:drop-shadow(0 6px 18px rgba(0,0,0,.45));
