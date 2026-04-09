@@ -83,13 +83,12 @@ body{
   color:rgba(234,240,255,.75);
 }
 
-/* RIGHT SIDE */
 .right{
   display:flex;
   align-items:center;
   gap:10px;
+  margin-left:auto; /* 🔥 THIS IS THE KEY FIX */
 }
-
 /* BUTTON */
 .btn{
   height:40px;
