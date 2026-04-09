@@ -64,6 +64,12 @@ body{
   display:flex;
   flex-direction:column;
   justify-content:center;
+}.line{
+  margin-top:8px;
+  font-size:14px;
+  color:rgba(234,240,255,.75);
+  line-height:1.4;
+  max-width:520px;
 }
 .brandLogo{
   width:96px;
