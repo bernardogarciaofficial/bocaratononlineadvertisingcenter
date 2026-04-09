@@ -54,11 +54,11 @@ body{
 }
 /* 🔥 PERFECT LOGO SIZE */
 .brandLogo{
-  width:64px;
-  height:64px;
+  width:80px;
+  height:80px;
   object-fit:contain;
   flex-shrink:0;
-  filter:drop-shadow(0 6px 15px rgba(0,0,0,.4));
+  filter:drop-shadow(0 6px 18px rgba(0,0,0,.45));
 }
 
 /* TEXT BLOCK */
