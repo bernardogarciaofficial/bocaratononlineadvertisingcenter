@@ -60,6 +60,10 @@ body{
   flex:1;
   min-width:0;
   justify-content:flex-start;
+}.brandText{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
 }
 .brandLogo{
   width:96px;
