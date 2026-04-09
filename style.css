@@ -56,11 +56,11 @@ body{
 .brand{
   display:flex;
   align-items:center;
-  gap:14px;
+  gap:16px;
   flex:1;
   min-width:0;
+  justify-content:flex-start;
 }
-
 .brandLogo{
   width:96px;
   height:96px;
