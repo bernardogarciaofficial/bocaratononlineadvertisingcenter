@@ -344,8 +344,8 @@ body{
   }
 
   .brandLogo{
-    width:72px;
-    height:72px;
+    width:150px;
+    height:150px;
     object-fit:contain;
     flex-shrink:0;
     filter:drop-shadow(0 6px 18px rgba(0,0,0,.45));
