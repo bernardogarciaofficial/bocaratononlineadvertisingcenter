@@ -13,6 +13,11 @@
 }
 
 *{box-sizing:border-box}
+
+html,body{
+  height:100%;
+}
+
 body{
   margin:0;
   font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
@@ -32,6 +37,7 @@ body{
 .topbar{
   position:sticky;
   top:0;
+  z-index:10;
   backdrop-filter:blur(10px);
   background:rgba(5,7,12,.8);
   border-bottom:1px solid var(--border);
@@ -43,6 +49,7 @@ body{
   justify-content:space-between;
   gap:20px;
   padding:16px 0;
+  width:100%;
 }
 
 /* LEFT SIDE */
@@ -50,12 +57,13 @@ body{
   display:flex;
   align-items:center;
   gap:14px;
-  flex:1; /* 🔥 THIS FIXES THE LAYOUT */
+  flex:1;
+  min-width:0;
 }
-/* 🔥 PERFECT LOGO SIZE */
+
 .brandLogo{
-  width:80px;
-  height:80px;
+  width:96px;
+  height:96px;
   object-fit:contain;
   flex-shrink:0;
   filter:drop-shadow(0 6px 18px rgba(0,0,0,.45));
@@ -67,28 +75,33 @@ body{
   font-size:20px;
   line-height:1.05;
   letter-spacing:-0.4px;
-
-  background:linear-gradient(90deg,
+  background:linear-gradient(
+    90deg,
     #fff,
     rgba(234,240,255,.8),
     rgba(74,163,255,.95)
   );
   -webkit-background-clip:text;
+  background-clip:text;
   color:transparent;
 }
 
 .brandText .sub{
-  margin-top:4px;
+  margin:4px 0 0 0;
   font-size:12px;
+  line-height:1.2;
   color:rgba(234,240,255,.75);
 }
 
+/* RIGHT SIDE */
 .right{
   display:flex;
   align-items:center;
   gap:10px;
-  margin-left:auto; /* 🔥 THIS IS THE KEY FIX */
+  margin-left:auto;
+  flex-shrink:0;
 }
+
 /* BUTTON */
 .btn{
   height:40px;
@@ -102,10 +115,16 @@ body{
   display:flex;
   align-items:center;
   justify-content:center;
+  white-space:nowrap;
 }
 
 .btn.primary{
   background:linear-gradient(135deg, rgba(74,163,255,.25), rgba(124,92,255,.2));
+  box-shadow:0 10px 25px rgba(0,0,0,.20);
+}
+
+.btn:hover{
+  filter:brightness(1.05);
 }
 
 /* PILL */
@@ -114,8 +133,10 @@ body{
   border-radius:999px;
   font-size:12px;
   font-weight:900;
+  color:var(--text);
   background:rgba(255,255,255,.06);
   border:1px solid rgba(255,255,255,.12);
+  white-space:nowrap;
 }
 
 /* ===== INFO BOX ===== */
@@ -125,16 +146,32 @@ body{
   border:1px solid var(--border);
   border-radius:18px;
   padding:16px;
+  box-shadow:var(--shadow);
 }
 
 .info h2{
-  margin:0 0 6px;
+  margin:0 0 6px 0;
   font-size:14px;
 }
 
-.info ul{
-  margin-left:18px;
+.info .line{
+  margin:8px 0;
   font-size:13px;
+  line-height:1.45;
+  color:var(--muted);
+}
+
+.info ul{
+  margin:8px 0 0 18px;
+  font-size:13px;
+  line-height:1.55;
+  color:var(--muted);
+}
+
+.note{
+  margin-top:10px;
+  font-size:13px;
+  line-height:1.45;
   color:var(--muted);
 }
 
@@ -151,12 +188,29 @@ body{
   border:1px solid var(--border);
   border-radius:16px;
   overflow:hidden;
+  position:relative;
+  box-shadow:0 14px 40px rgba(0,0,0,.25);
 }
 
 .thumb{
   width:100%;
   aspect-ratio:16/9;
   background:#000;
+  display:block;
+  object-fit:cover;
+}
+
+.thumb.empty{
+  display:grid;
+  place-items:center;
+  color:rgba(234,240,255,.65);
+  font-weight:900;
+  font-size:12px;
+  letter-spacing:.7px;
+  background:
+    radial-gradient(700px 250px at 0% 0%, rgba(74,163,255,.18), transparent 60%),
+    radial-gradient(700px 250px at 100% 0%, rgba(124,92,255,.16), transparent 60%),
+    linear-gradient(135deg, rgba(255,255,255,.05), rgba(0,0,0,.35));
 }
 
 .meta{
@@ -164,13 +218,106 @@ body{
 }
 
 .biz{
+  margin:0;
   font-size:13px;
   font-weight:900;
 }
 
 .desc{
+  margin:0;
   font-size:12px;
   color:var(--muted);
+}
+
+.slotTag{
+  position:absolute;
+  top:10px;
+  left:10px;
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:.5px;
+  padding:6px 9px;
+  border-radius:999px;
+  background:rgba(0,0,0,.45);
+  border:1px solid rgba(255,255,255,.14);
+  color:rgba(234,240,255,.9);
+}
+
+/* ===== FOOTER ===== */
+.footer{
+  padding:22px 0 26px 0;
+  color:rgba(234,240,255,.65);
+  font-size:12px;
+  border-top:1px solid rgba(255,255,255,.10);
+  margin-top:18px;
+}
+
+/* ===== MODAL ===== */
+.modal{
+  position:fixed;
+  inset:0;
+  display:none;
+  background:rgba(0,0,0,.78);
+  z-index:99;
+  padding:18px;
+}
+
+.modal.open{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.modalBox{
+  width:min(980px, 100%);
+  background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.05));
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:18px;
+  overflow:hidden;
+  box-shadow:0 30px 90px rgba(0,0,0,.55);
+}
+
+.modalHead{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:12px 14px;
+  border-bottom:1px solid rgba(255,255,255,.10);
+}
+
+.modalTitle{
+  font-weight:950;
+}
+
+.closeBtn{
+  border:1px solid rgba(255,255,255,.14);
+  background:rgba(255,255,255,.06);
+  color:var(--text);
+  border-radius:12px;
+  height:36px;
+  padding:0 12px;
+  cursor:pointer;
+  font-weight:900;
+}
+
+.modalBody{
+  padding:14px;
+}
+
+.modalBody video,
+.modalBody img{
+  width:100%;
+  height:auto;
+  border-radius:14px;
+  display:block;
+  background:#000;
+}
+
+.modalFoot{
+  padding:10px 14px 14px 14px;
+  color:rgba(234,240,255,.65);
+  font-size:12px;
+  border-top:1px solid rgba(255,255,255,.10);
 }
 
 /* ===== MOBILE ===== */
@@ -183,17 +330,22 @@ body{
   .right{
     width:100%;
     justify-content:flex-start;
+    margin-left:0;
   }
 
   .brandLogo{
-  width:80px;
-  height:80px;
-  object-fit:contain;
-  flex-shrink:0;
-  filter:drop-shadow(0 6px 18px rgba(0,0,0,.45));
-}
+    width:72px;
+    height:72px;
+    object-fit:contain;
+    flex-shrink:0;
+    filter:drop-shadow(0 6px 18px rgba(0,0,0,.45));
+  }
 
   .brandText h1{
     font-size:18px;
+  }
+
+  .brandText .sub{
+    font-size:11px;
   }
 }
