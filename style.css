@@ -361,7 +361,10 @@ body{
 /* ===== SCROLL DOWN HINTS (left + right) ===== */
 .scrollHint{
   position:fixed;
-  top:120px;
+
+  /* moved down so it won't cover the header title */
+  top: calc(240px + env(safe-area-inset-top));
+
   z-index:50;
   display:flex;
   flex-direction:column;
@@ -398,6 +401,11 @@ body{
   50%     { transform:translateY(6px); opacity:1; }
 }
 
+/* Push it a bit lower on large screens */
+@media (min-width: 900px){
+  .scrollHint{ top: calc(280px + env(safe-area-inset-top)); }
+}
+
 /* Hide on small screens so it doesn't cover content */
 @media(max-width:760px){
   .brandText h1{
@@ -411,3 +419,4 @@ body{
   .scrollHint{
     display:none;
   }
+}
