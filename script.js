@@ -25,15 +25,17 @@ const ADS = Array.from({ length: 100 }, (_, i) => {
 // --- DOM ---
 document.getElementById("year").textContent = new Date().getFullYear();
 
-// If the page still has these elements, hide/clear them so no email info shows
+// Hide the top-right email button (since email/mailto was removed),
+// but DO NOT clear the info text line in the page anymore.
 const emailBtn = document.getElementById("emailBtn");
 if (emailBtn) {
   emailBtn.removeAttribute("href");
   emailBtn.style.display = "none";
 }
 
-const emailText = document.getElementById("emailText");
-if (emailText) emailText.textContent = "";
+// IMPORTANT: removed the code that cleared #emailText
+// const emailText = document.getElementById("emailText");
+// if (emailText) emailText.textContent = "";
 
 const grid = document.getElementById("grid");
 const countPill = document.getElementById("countPill");
