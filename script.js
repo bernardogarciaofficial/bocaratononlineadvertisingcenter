@@ -1,21 +1,8 @@
- // --- Settings ---
-const EMAIL = "bernardogarciagarcia441@gmail.com";
+// --- Settings ---
+// (Email removed)
 
 // Your GitHub Pages URL (QR points here)
 const PAGE_URL = "https://bernardogarciaofficial.github.io/boca-raton-online-advertising-center/";
-
-// --- Build the mailto link ---
-const subject = encodeURIComponent("Boca Raton Online Ad Submission (Free)");
-const body = encodeURIComponent(
-`Business Name:
-Phone:
-Website (optional):
-
-Attach your VIDEO (MP4/MOV) or IMAGE (JPG/PNG) to this email.
-Recommended video length: 10–15 seconds (max 20).`
-);
-
-const mailto = `mailto:${EMAIL}?subject=${subject}&body=${body}`;
 
 // --- 100 starter slots (landscape 16:9) ---
 // Put your files in /media/ like: ad001.mp4, ad002.mp4 ...
@@ -26,7 +13,7 @@ const ADS = Array.from({ length: 100 }, (_, i) => {
   const n = String(i + 1).padStart(3, "0");
   return {
     business: `Boca Business #${n}`,
-    desc: "Email your ad to be posted (Free).",
+    desc: "Submit your ad to be posted (Free).",
     video: `media/ad${n}.mp4`,
     poster: `media/ad${n}.jpg`,
     // image: `media/ad${n}.jpg`, // (use this instead of video/poster for image-only ads)
@@ -37,8 +24,16 @@ const ADS = Array.from({ length: 100 }, (_, i) => {
 
 // --- DOM ---
 document.getElementById("year").textContent = new Date().getFullYear();
-document.getElementById("emailBtn").href = mailto;
-document.getElementById("emailText").textContent = EMAIL;
+
+// If the page still has these elements, hide/clear them so no email info shows
+const emailBtn = document.getElementById("emailBtn");
+if (emailBtn) {
+  emailBtn.removeAttribute("href");
+  emailBtn.style.display = "none";
+}
+
+const emailText = document.getElementById("emailText");
+if (emailText) emailText.textContent = "";
 
 const grid = document.getElementById("grid");
 const countPill = document.getElementById("countPill");
