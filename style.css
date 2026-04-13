@@ -184,16 +184,18 @@ body{
   box-shadow:var(--shadow);
 }
 
-.info h2{
-  margin:0 0 6px 0;
-  font-size:14px;
-}
-
+/* Center the advertising info text */
 .info .line{
   margin:8px 0;
   font-size:13px;
   line-height:1.45;
   color:var(--muted);
+  text-align:center;   /* <-- this centers the sentence */
+}
+
+.info h2{
+  margin:0 0 6px 0;
+  font-size:14px;
 }
 
 .info ul{
