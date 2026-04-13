@@ -1,5 +1,5 @@
 // ================== SETTINGS ==================
-const EMAIL = "bernardogarciagarcia441@gmail.com"; // <-- change if needed
+const EMAIL = <-- change if needed
 
 // How many thumbnails/slots you want on the wall:
 const SLOT_COUNT = 100;
