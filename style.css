@@ -43,34 +43,57 @@ body{
   border-bottom:1px solid var(--border);
 }
 
+/* Make header content centered (logo + title + subtitle) */
 .row{
   display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:20px;
+  flex-direction:column;     /* stack items */
+  align-items:center;        /* center horizontally */
+  justify-content:center;
+  gap:10px;
   padding:16px 0;
   width:100%;
+  text-align:center;
 }
 
-/* LEFT SIDE */
+/* Center logo */
+.logoCenter{
+  display:flex;
+  justify-content:center;
+  width:100%;
+  margin:0;
+}
+
+.logoCenter img{
+  width:200px;
+  height:auto;
+  object-fit:contain;
+}
+
+/* Center brand text */
 .brand{
   display:flex;
   align-items:center;
-  gap:16px;
-  flex:1;
+  justify-content:center;
+  flex:0;
   min-width:0;
-  justify-content:flex-start;
-}.brandText{
+}
+
+.brandText{
   display:flex;
   flex-direction:column;
   justify-content:center;
-}.line{
+  align-items:center;
+}
+
+/* Text line blocks */
+.line{
   margin-top:8px;
   font-size:14px;
   color:rgba(234,240,255,.75);
   line-height:1.4;
   max-width:520px;
 }
+
 .brandLogo{
   width:300px;
   height:300px;
@@ -103,13 +126,15 @@ body{
   color:rgba(234,240,255,.75);
 }
 
-/* RIGHT SIDE */
+/* RIGHT SIDE (button + pill) now centered under title */
 .right{
   display:flex;
   align-items:center;
+  justify-content:center;
   gap:10px;
-  margin-left:auto;
+  margin-left:0;
   flex-shrink:0;
+  width:100%;
 }
 
 /* BUTTON */
@@ -332,25 +357,6 @@ body{
 
 /* ===== MOBILE ===== */
 @media(max-width:760px){
-  .row{
-    flex-direction:column;
-    align-items:flex-start;
-  }
-
-  .right{
-    width:100%;
-    justify-content:flex-start;
-    margin-left:0;
-  }
-
-  .brandLogo{
-    width:300px;
-    height:300px;
-    object-fit:contain;
-    flex-shrink:0;
-    filter:drop-shadow(0 6px 18px rgba(0,0,0,.45));
-  }
-
   .brandText h1{
     font-size:18px;
   }
@@ -358,14 +364,4 @@ body{
   .brandText .sub{
     font-size:11px;
   }
-}.logoCenter{
-  display:flex;
-  justify-content:center;
-  margin-bottom:10px;
-}
-
-.logoCenter img{
-  width:200px;
-  height:auto;
-  object-fit:contain;
 }
