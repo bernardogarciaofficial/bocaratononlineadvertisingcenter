@@ -1,5 +1,6 @@
 // ================== SETTINGS ==================
-const EMAIL = <-- change if needed
+const EMAIL = "teleunionlatina@hotmail.com"; // <-- change if needed
+const SHOW_EMAIL_TEXT = false; // true = show email on page, false = keep it hidden
 
 // How many thumbnails/slots you want on the wall:
 const SLOT_COUNT = 100;
@@ -15,8 +16,6 @@ const EMPTY_TITLE = "Available Slot";
 const EMPTY_DESC = "Upload your commercial spot to claim this spot.";
 
 // ================== BUSINESS NAMES ==================
-// Add names here. Key is the slot number (1..100).
-// Example: 1: "Bernardo’s Roofing"
 const BUSINESS_BY_SLOT = {
   1: "Skin Wizard",
   // 2: "Another Business",
@@ -30,21 +29,39 @@ const TAGLINE_BY_SLOT = {
 };
 
 // ================== MAILTO ==================
-const subject = encodeURIComponent("Boca Raton Online Ad Submission (Free)");
-const body = encodeURIComponent(
+function buildMailto(email) {
+  const subject = encodeURIComponent("Boca Raton Online Ad Submission (Free)");
+  const body = encodeURIComponent(
 `Business Name:
 Phone:
 Website (optional):
 
 Attach your VIDEO (MP4/MOV) or IMAGE (JPG/PNG) to this email.
 Recommended video length: 10–15 seconds (max 20).`
-);
-const mailto = `mailto:${EMAIL}?subject=${subject}&body=${body}`;
+  );
 
-// ================== DOM ==================
+  return `mailto:${email}?subject=${subject}&body=${body}`;
+}
+
+// ================== DOM (top UI) ==================
 document.getElementById("year").textContent = new Date().getFullYear();
-document.getElementById("emailBtn").href = mailto;
-document.getElementById("emailText").textContent = EMAIL;
+
+function setEmailUI() {
+  const emailBtn = document.getElementById("emailBtn");
+  const emailText = document.getElementById("emailText");
+  const mailto = buildMailto(EMAIL);
+
+  if (emailBtn) {
+    emailBtn.href = mailto;
+    // If your HTML has no text inside the button, this ensures something shows:
+    if (!emailBtn.textContent.trim()) emailBtn.textContent = "Email us";
+  }
+
+  if (emailText) {
+    emailText.textContent = SHOW_EMAIL_TEXT ? ` ${EMAIL}` : "";
+  }
+}
+setEmailUI();
 
 const grid = document.getElementById("grid");
 const countPill = document.getElementById("countPill");
@@ -60,9 +77,13 @@ modal.addEventListener("click", (e) => { if (e.target === modal) closeModal(); }
 document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeModal(); });
 
 // ================== HELPERS ==================
-function escapeHtml(s){
+function escapeHtml(s) {
   return String(s).replace(/[&<>"']/g, (m) => ({
-    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#039;",
   }[m]));
 }
 
@@ -109,17 +130,21 @@ async function resolveSlotMedia(i) {
   const png = slotPath(i, "png");
 
   if (await exists(mp4)) {
-    return { kind: "video", src: mp4, poster: (await exists(jpg)) ? jpg : ((await exists(png)) ? png : "") };
+    return {
+      kind: "video",
+      src: mp4,
+      poster: (await exists(jpg)) ? jpg : ((await exists(png)) ? png : ""),
+    };
   }
   if (await exists(mov)) {
-    return { kind: "video", src: mov, poster: (await exists(jpg)) ? jpg : ((await exists(png)) ? png : "") };
+    return {
+      kind: "video",
+      src: mov,
+      poster: (await exists(jpg)) ? jpg : ((await exists(png)) ? png : ""),
+    };
   }
-  if (await exists(jpg)) {
-    return { kind: "image", src: jpg };
-  }
-  if (await exists(png)) {
-    return { kind: "image", src: png };
-  }
+  if (await exists(jpg)) return { kind: "image", src: jpg };
+  if (await exists(png)) return { kind: "image", src: png };
 
   return { kind: "empty" };
 }
@@ -136,7 +161,7 @@ async function resolveSlotMedia(i) {
       desc: taglineForSlot(i, false),
       phone: "",
       website: "",
-      _media: { kind: "empty" }
+      _media: { kind: "empty" },
     };
 
     const card = makeCard(ad);
@@ -145,7 +170,6 @@ async function resolveSlotMedia(i) {
     resolveSlotMedia(i).then((media) => {
       ad._media = media;
 
-      // If slot is filled, keep business name but update the description to be "Tap to ..."
       const filled = media.kind !== "empty";
       ad.business = businessNameForSlot(i);
       ad.desc = taglineForSlot(i, filled);
@@ -161,7 +185,6 @@ function makeCard(ad) {
   card.className = "card";
   card.dataset.slot = String(ad.slot);
 
-  // a small "slot #" badge
   const tag = document.createElement("div");
   tag.className = "slotTag";
   tag.textContent = `#${pad3(ad.slot)}`;
@@ -193,7 +216,6 @@ function updateCardText(card, ad) {
 }
 
 function updateCardMedia(card, ad) {
-  // Media element is the 2nd child because 1st child is the slotTag now.
   // Children: [slotTag, media, meta]
   const oldMedia = card.children[1];
   let mediaEl;
@@ -215,7 +237,7 @@ function updateCardMedia(card, ad) {
     });
 
     if (isDesktopHover()) {
-      card.addEventListener("mouseenter", () => v.play().catch(()=>{}));
+      card.addEventListener("mouseenter", () => v.play().catch(() => {}));
       card.addEventListener("mouseleave", () => { v.pause(); try { v.currentTime = 0.1; } catch {} });
     }
 
@@ -226,7 +248,6 @@ function updateCardMedia(card, ad) {
     img.src = m.src;
     img.alt = `Ad slot ${pad3(ad.slot)}`;
     img.loading = "lazy";
-
     mediaEl = img;
   } else {
     if (oldMedia && oldMedia.nodeType === 1) {
@@ -254,7 +275,7 @@ function openModal(ad) {
     v.preload = "auto";
     if (m.poster) v.poster = m.poster;
     modalBody.appendChild(v);
-    v.play().catch(()=>{});
+    v.play().catch(() => {});
     modalFoot.textContent = `File: ${m.src}`;
   } else if (m.kind === "image") {
     const img = document.createElement("img");
