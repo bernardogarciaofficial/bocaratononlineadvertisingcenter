@@ -1,192 +1,414 @@
-// --- Settings ---
-// (Email removed)
+:root{
+  --bg0:#070A12;
+  --bg1:#0B1020;
+  --text:#EAF0FF;
+  --muted:rgba(234,240,255,.70);
+  --border:rgba(255,255,255,.10);
 
-// Your GitHub Pages URL (QR points here)
-const PAGE_URL =
-  "https://bernardogarciaofficial.github.io/boca-raton-online-advertising-center/";
+  --brandA:#4AA3FF;
+  --brandB:#7C5CFF;
+  --brandC:#19D3C5;
 
-// --- 100 starter slots (landscape 16:9) ---
-// Put your files in /media/ like: slot001.mp4, slot002.mp4 ...
-// OPTIONAL poster images: slot001.jpg, slot002.jpg ...
-//
-// If you want an IMAGE ad for a slot later, replace video+poster with image.
-const ADS = Array.from({ length: 100 }, (_, i) => {
-  const n = String(i + 1).padStart(3, "0");
-  return {
-    business: `Boca Business #${n}`,
-    desc: "Submit your ad to be posted (Free).",
-    video: `media/slot${n}.mp4`,
-    poster: `media/slot${n}.jpg`,
-    // image: `media/slot${n}.jpg`, // (use this instead of video/poster for image-only ads)
-    phone: "",
-    website: "",
-  };
-});
-
-// --- DOM ---
-document.getElementById("year").textContent = new Date().getFullYear();
-
-// Hide the top-right email button (since email/mailto was removed),
-// but DO NOT clear the info text line in the page anymore.
-const emailBtn = document.getElementById("emailBtn");
-if (emailBtn) {
-  emailBtn.removeAttribute("href");
-  emailBtn.style.display = "none";
+  --shadow:0 20px 60px rgba(0,0,0,.45);
 }
 
-const grid = document.getElementById("grid");
-const countPill = document.getElementById("countPill");
+*{box-sizing:border-box}
 
-// --- Modal elements ---
-const modal = document.getElementById("modal");
-const modalTitle = document.getElementById("modalTitle");
-const modalBody = document.getElementById("modalBody");
-const modalFoot = document.getElementById("modalFoot");
-document.getElementById("closeBtn").onclick = closeModal;
-modal.addEventListener("click", (e) => {
-  if (e.target === modal) closeModal();
-});
+html,body{
+  height:100%;
+}
 
-// --- Render cards ---
-countPill.textContent = `${ADS.length} ads`;
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
+  color:var(--text);
+  background:
+    radial-gradient(1200px 600px at 15% -10%, rgba(74,163,255,.25), transparent 60%),
+    radial-gradient(900px 500px at 85% 0%, rgba(124,92,255,.22), transparent 55%),
+    linear-gradient(180deg, var(--bg0), var(--bg1));
+}
 
-ADS.forEach((ad) => {
-  const card = document.createElement("div");
-  card.className = "card";
+.wrap{
+  width:min(1100px, calc(100% - 28px));
+  margin:auto;
+}
 
-  let media;
+/* ===== HEADER ===== */
+.topbar{
+  position:sticky;
+  top:0;
+  z-index:10;
+  backdrop-filter:blur(10px);
+  background:rgba(5,7,12,.8);
+  border-bottom:1px solid var(--border);
+}
 
-  // Prefer video thumbnail if configured
-  if (ad.video) {
-    const v = document.createElement("video");
-    v.className = "thumb";
-    v.src = ad.video;
-    v.muted = true;
-    v.loop = true;
-    v.playsInline = true;
-    v.preload = "metadata";
-    if (ad.poster) v.poster = ad.poster;
+/* Make header content centered (logo + title + subtitle) */
+.row{
+  display:flex;
+  flex-direction:column;     /* stack items */
+  align-items:center;        /* center horizontally */
+  justify-content:center;
+  gap:10px;
+  padding:16px 0;
+  width:100%;
+  text-align:center;
+}
 
-    // If video fails to load (404, codec, etc.), fall back gracefully
-    v.addEventListener("error", () => {
-      // Replace the video element with an <img> poster (or text fallback)
-      const fallback = document.createElement("img");
-      fallback.className = "thumb";
-      fallback.alt = ad.business;
+/* Center logo */
+.logoCenter{
+  display:flex;
+  justify-content:center;
+  width:100%;
+  margin:0;
+}
 
-      if (ad.poster) {
-        fallback.src = ad.poster;
-      } else {
-        // no poster: show a simple placeholder style
-        fallback.removeAttribute("src");
-        fallback.style.background = "#111";
-        fallback.style.display = "block";
-      }
+.logoCenter img{
+  width:200px;
+  height:auto;
+  object-fit:contain;
+}
 
-      v.replaceWith(fallback);
-      media = fallback;
-    });
+/* Center brand text */
+.brand{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex:0;
+  min-width:0;
+}
 
-    // Desktop hover play (mobile ignores hover; click opens modal)
-    card.addEventListener("mouseenter", () => v.play().catch(() => {}));
-    card.addEventListener("mouseleave", () => {
-      v.pause();
-      v.currentTime = 0;
-    });
+.brandText{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+}
 
-    media = v;
-  } else if (ad.image) {
-    // Image thumbnail
-    const img = document.createElement("img");
-    img.className = "thumb";
-    img.src = ad.image;
-    img.alt = ad.business;
-    img.loading = "lazy";
-    media = img;
-  } else {
-    // No media configured
-    const placeholder = document.createElement("div");
-    placeholder.className = "thumb";
-    placeholder.style.display = "grid";
-    placeholder.style.placeItems = "center";
-    placeholder.style.background = "#111";
-    placeholder.style.color = "#fff";
-    placeholder.style.fontSize = "14px";
-    placeholder.textContent = "No media";
-    media = placeholder;
+/* Text line blocks */
+.line{
+  margin-top:8px;
+  font-size:14px;
+  color:rgba(234,240,255,.75);
+  line-height:1.4;
+  max-width:520px;
+}
+
+.brandLogo{
+  width:300px;
+  height:300px;
+  object-fit:contain;
+  flex-shrink:0;
+  filter:drop-shadow(0 6px 18px rgba(0,0,0,.45));
+}
+
+/* TEXT BLOCK */
+.brandText h1{
+  margin:0;
+  font-size:20px;
+  line-height:1.05;
+  letter-spacing:-0.4px;
+  background:linear-gradient(
+    90deg,
+    #fff,
+    rgba(234,240,255,.8),
+    rgba(74,163,255,.95)
+  );
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+}
+
+.brandText .sub{
+  margin:4px 0 0 0;
+  font-size:12px;
+  line-height:1.2;
+  color:rgba(234,240,255,.75);
+}
+
+/* RIGHT SIDE (button + pill) now centered under title */
+.right{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  margin-left:0;
+  flex-shrink:0;
+  width:100%;
+}
+
+/* BUTTON */
+.btn{
+  height:40px;
+  padding:0 14px;
+  border-radius:12px;
+  font-weight:900;
+  font-size:13px;
+  border:1px solid rgba(255,255,255,.15);
+  color:var(--text);
+  text-decoration:none;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  white-space:nowrap;
+}
+
+.btn.primary{
+  background:linear-gradient(135deg, rgba(74,163,255,.25), rgba(124,92,255,.2));
+  box-shadow:0 10px 25px rgba(0,0,0,.20);
+}
+
+.btn:hover{
+  filter:brightness(1.05);
+}
+
+/* PILL */
+.pill{
+  padding:6px 10px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:900;
+  color:var(--text);
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.12);
+  white-space:nowrap;
+}
+
+/* ===== INFO BOX ===== */
+.info{
+  margin-top:18px;
+  background:rgba(255,255,255,.05);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:16px;
+  box-shadow:var(--shadow);
+}
+
+.info h2{
+  margin:0 0 6px 0;
+  font-size:14px;
+}
+
+/* Center the advertising info line */
+.info .line{
+  margin:8px auto;
+  font-size:13px;
+  line-height:1.45;
+  color:var(--muted);
+  text-align:center;
+  max-width:520px;
+}
+
+.info ul{
+  margin:8px 0 0 18px;
+  font-size:13px;
+  line-height:1.55;
+  color:var(--muted);
+}
+
+.note{
+  margin-top:10px;
+  font-size:13px;
+  line-height:1.45;
+  color:var(--muted);
+}
+
+/* ===== SCROLL DOWN HINT (single, centered) ===== */
+.scrollHintsRow{
+  margin-top:14px;
+  margin-bottom:8px;
+  display:flex;
+  justify-content:center;  /* center the single hint */
+  align-items:center;
+  width:100%;
+}
+
+.scrollHint{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:6px;
+  padding:10px 10px;
+  border-radius:14px;
+  text-decoration:none;
+  color:rgba(234,240,255,.92);
+  background:rgba(0,0,0,.35);
+  border:1px solid rgba(255,255,255,.14);
+  backdrop-filter:blur(10px);
+  box-shadow:0 14px 40px rgba(0,0,0,.25);
+  user-select:none;
+  min-width:120px;
+}
+
+.scrollHintText{
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:.9px;
+}
+
+.scrollHintArrow{
+  font-size:22px;
+  line-height:1;
+  animation:scrollHintBounce 1.1s infinite;
+}
+
+@keyframes scrollHintBounce{
+  0%,100% { transform:translateY(0); opacity:.9; }
+  50%     { transform:translateY(6px); opacity:1; }
+}
+
+/* ===== GRID ===== */
+.grid{
+  margin-top:14px;
+  display:grid;
+  gap:12px;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+}
+
+.card{
+  background:rgba(255,255,255,.05);
+  border:1px solid var(--border);
+  border-radius:16px;
+  overflow:hidden;
+  position:relative;
+  box-shadow:0 14px 40px rgba(0,0,0,.25);
+}
+
+.thumb{
+  width:100%;
+  aspect-ratio:16/9;
+  background:#000;
+  display:block;
+  object-fit:cover;
+}
+
+.thumb.empty{
+  display:grid;
+  place-items:center;
+  color:rgba(234,240,255,.65);
+  font-weight:900;
+  font-size:12px;
+  letter-spacing:.7px;
+  background:
+    radial-gradient(700px 250px at 0% 0%, rgba(74,163,255,.18), transparent 60%),
+    radial-gradient(700px 250px at 100% 0%, rgba(124,92,255,.16), transparent 60%),
+    linear-gradient(135deg, rgba(255,255,255,.05), rgba(0,0,0,.35));
+}
+
+.meta{
+  padding:10px;
+}
+
+.biz{
+  margin:0;
+  font-size:13px;
+  font-weight:900;
+}
+
+.desc{
+  margin:0;
+  font-size:12px;
+  color:var(--muted);
+}
+
+.slotTag{
+  position:absolute;
+  top:10px;
+  left:10px;
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:.5px;
+  padding:6px 9px;
+  border-radius:999px;
+  background:rgba(0,0,0,.45);
+  border:1px solid rgba(255,255,255,.14);
+  color:rgba(234,240,255,.9);
+}
+
+/* ===== FOOTER ===== */
+.footer{
+  padding:22px 0 26px 0;
+  color:rgba(234,240,255,.65);
+  font-size:12px;
+  border-top:1px solid rgba(255,255,255,.10);
+  margin-top:18px;
+}
+
+/* ===== MODAL ===== */
+.modal{
+  position:fixed;
+  inset:0;
+  display:none;
+  background:rgba(0,0,0,.78);
+  z-index:99;
+  padding:18px;
+}
+
+.modal.open{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.modalBox{
+  width:min(980px, 100%);
+  background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.05));
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:18px;
+  overflow:hidden;
+  box-shadow:0 30px 90px rgba(0,0,0,.55);
+}
+
+.modalHead{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:12px 14px;
+  border-bottom:1px solid rgba(255,255,255,.10);
+}
+
+.modalTitle{
+  font-weight:950;
+}
+
+.closeBtn{
+  border:1px solid rgba(255,255,255,.14);
+  background:rgba(255,255,255,.06);
+  color:var(--text);
+  border-radius:12px;
+  height:36px;
+  padding:0 12px;
+  cursor:pointer;
+  font-weight:900;
+}
+
+.modalBody{
+  padding:14px;
+}
+
+.modalBody video,
+.modalBody img{
+  width:100%;
+  height:auto;
+  border-radius:14px;
+  display:block;
+  background:#000;
+}
+
+.modalFoot{
+  padding:10px 14px 14px 14px;
+  color:rgba(234,240,255,.65);
+  font-size:12px;
+  border-top:1px solid rgba(255,255,255,.10);
+}
+
+/* ===== MOBILE ===== */
+@media(max-width:760px){
+  .brandText h1{
+    font-size:18px;
   }
 
-  const meta = document.createElement("div");
-  meta.className = "meta";
-  meta.innerHTML = `
-    <p class="biz">${escapeHtml(ad.business)}</p>
-    <p class="desc">${escapeHtml(ad.desc || "")}</p>
-  `;
-
-  card.appendChild(media);
-  card.appendChild(meta);
-  card.addEventListener("click", () => openModal(ad));
-  grid.appendChild(card);
-});
-
-// --- Modal functions ---
-function openModal(ad) {
-  modalTitle.textContent = ad.business;
-  modalBody.innerHTML = "";
-  modalFoot.innerHTML = "";
-
-  if (ad.video) {
-    const v = document.createElement("video");
-    v.controls = true;
-    v.playsInline = true;
-    v.src = ad.video;
-    if (ad.poster) v.poster = ad.poster;
-
-    // If the video can't load, show a friendly message instead
-    v.addEventListener("error", () => {
-      modalBody.innerHTML = "";
-      const msg = document.createElement("div");
-      msg.style.padding = "16px";
-      msg.textContent = "Video unavailable for this slot.";
-      modalBody.appendChild(msg);
-    });
-
-    modalBody.appendChild(v);
-    v.play().catch(() => {});
-  } else if (ad.image) {
-    const img = document.createElement("img");
-    img.src = ad.image;
-    img.alt = ad.business;
-    modalBody.appendChild(img);
-  } else {
-    const msg = document.createElement("div");
-    msg.style.padding = "16px";
-    msg.textContent = "Media file not set yet for this slot.";
-    modalBody.appendChild(msg);
+  .brandText .sub{
+    font-size:11px;
   }
-
-  const bits = [];
-  if (ad.phone) bits.push(`Phone: ${ad.phone}`);
-  if (ad.website) bits.push(`Website: ${ad.website}`);
-  modalFoot.textContent = bits.join(" • ");
-
-  modal.classList.add("open");
-  modal.setAttribute("aria-hidden", "false");
-}
-
-function closeModal() {
-  modal.classList.remove("open");
-  modal.setAttribute("aria-hidden", "true");
-  modalBody.innerHTML = "";
-}
-
-// Basic escaping for safety
-function escapeHtml(s) {
-  return String(s).replace(/[&<>"']/g, (m) => ({
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    '"': "&quot;",
-    "'": "&#039;",
-  })[m]);
 }
