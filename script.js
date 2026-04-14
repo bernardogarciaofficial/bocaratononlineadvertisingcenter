@@ -5,8 +5,8 @@
 const PAGE_URL = "https://bernardogarciaofficial.github.io/boca-raton-online-advertising-center/";
 
 // --- 100 starter slots (landscape 16:9) ---
-// Put your files in /media/ like: ad001.mp4, ad002.mp4 ...
-// OPTIONAL poster images: ad001.jpg, ad002.jpg ...
+// Put your files in /media/ like: slot001.mp4, slot002.mp4 ...
+// OPTIONAL poster images: slot001.jpg, slot002.jpg ...
 //
 // If you want an IMAGE ad for a slot later, replace video+poster with image.
 const ADS = Array.from({ length: 100 }, (_, i) => {
@@ -14,9 +14,10 @@ const ADS = Array.from({ length: 100 }, (_, i) => {
   return {
     business: `Boca Business #${n}`,
     desc: "Submit your ad to be posted (Free).",
-    video: `media/ad${n}.mp4`,
-    poster: `media/ad${n}.jpg`,
-    // image: `media/ad${n}.jpg`, // (use this instead of video/poster for image-only ads)
+    // FIX: use slot### naming instead of ad###
+    video: `media/slot${n}.mp4`,
+    poster: `media/slot${n}.jpg`,
+    // image: `media/slot${n}.jpg`, // (use this instead of video/poster for image-only ads)
     phone: "",
     website: ""
   };
