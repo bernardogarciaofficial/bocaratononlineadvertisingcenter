@@ -2,22 +2,35 @@
 // (Email removed)
 
 // Your GitHub Pages URL (QR points here)
-const PAGE_URL = "https://bernardogarciaofficial.github.io/boca-raton-online-advertising-center/";
+// NOTE: repo is "bocaratononlineadvertisingcenter" (no hyphens)
+const PAGE_URL =
+  "https://bernardogarciaofficial.github.io/bocaratononlineadvertisingcenter/";
+
+// Base path for assets.
+// - On GitHub Pages project sites: "/<repo-name>/"
+// - Locally (or custom domain root): "/"
+const REPO_NAME = "bocaratononlineadvertisingcenter";
+const BASE_PATH = location.hostname.endsWith("github.io")
+  ? `/${REPO_NAME}/`
+  : "/";
+
+// Helper to build URLs that work reliably on GitHub Pages
+function assetUrl(relativePath) {
+  // relativePath example: "media/slot001.mp4"
+  return `${BASE_PATH}${relativePath}`.replace(/\/{2,}/g, "/");
+}
 
 // --- 100 starter slots (landscape 16:9) ---
 // Put your files in /media/ like: slot001.mp4, slot002.mp4 ...
 // OPTIONAL poster images: slot001.jpg, slot002.jpg ...
-//
-// If you want an IMAGE ad for a slot later, replace video+poster with image.
 const ADS = Array.from({ length: 100 }, (_, i) => {
   const n = String(i + 1).padStart(3, "0");
   return {
     business: `Boca Business #${n}`,
     desc: "Submit your ad to be posted (Free).",
-    // FIX: use slot### naming instead of ad###
-    video: `media/slot${n}.mp4`,
-    poster: `media/slot${n}.jpg`,
-    // image: `media/slot${n}.jpg`, // (use this instead of video/poster for image-only ads)
+    video: assetUrl(`media/slot${n}.mp4`),
+    poster: assetUrl(`media/slot${n}.jpg`),
+    // image: assetUrl(`media/slot${n}.jpg`), // use this instead for image-only ads
     phone: "",
     website: ""
   };
@@ -26,17 +39,12 @@ const ADS = Array.from({ length: 100 }, (_, i) => {
 // --- DOM ---
 document.getElementById("year").textContent = new Date().getFullYear();
 
-// Hide the top-right email button (since email/mailto was removed),
-// but DO NOT clear the info text line in the page anymore.
+// Hide the top-right email button (since email/mailto was removed)
 const emailBtn = document.getElementById("emailBtn");
 if (emailBtn) {
   emailBtn.removeAttribute("href");
   emailBtn.style.display = "none";
 }
-
-// IMPORTANT: removed the code that cleared #emailText
-// const emailText = document.getElementById("emailText");
-// if (emailText) emailText.textContent = "";
 
 const grid = document.getElementById("grid");
 const countPill = document.getElementById("countPill");
@@ -46,38 +54,62 @@ const modal = document.getElementById("modal");
 const modalTitle = document.getElementById("modalTitle");
 const modalBody = document.getElementById("modalBody");
 const modalFoot = document.getElementById("modalFoot");
+
 document.getElementById("closeBtn").onclick = closeModal;
-modal.addEventListener("click", (e) => { if (e.target === modal) closeModal(); });
+modal.addEventListener("click", (e) => {
+  if (e.target === modal) closeModal();
+});
 
 // --- Render cards ---
 countPill.textContent = `${ADS.length} ads`;
 
-ADS.forEach(ad => {
+ADS.forEach((ad) => {
   const card = document.createElement("div");
   card.className = "card";
 
-  // Video thumbnail
+  // Video thumbnail or image
   let media;
+
   if (ad.video) {
     media = document.createElement("video");
     media.className = "thumb";
+
+    // Use stable absolute URL (already built by assetUrl)
     media.src = ad.video;
+
     media.muted = true;
     media.loop = true;
     media.playsInline = true;
     media.preload = "metadata";
     if (ad.poster) media.poster = ad.poster;
 
+    // If the mp4 fails to load, keep something visible:
+    // - show the poster (already set)
+    // - and add a CSS class you can style if you want
+    media.addEventListener("error", () => {
+      card.classList.add("mediaError");
+      // keep poster visible; don't remove the element
+      media.pause();
+    });
+
     // Desktop hover play (mobile ignores hover; click opens modal)
     card.addEventListener("mouseenter", () => media.play().catch(() => {}));
-    card.addEventListener("mouseleave", () => { media.pause(); media.currentTime = 0; });
-  } else {
-    // Image thumbnail
+    card.addEventListener("mouseleave", () => {
+      media.pause();
+      media.currentTime = 0;
+    });
+  } else if (ad.image) {
     media = document.createElement("img");
     media.className = "thumb";
     media.src = ad.image;
     media.alt = ad.business;
     media.loading = "lazy";
+  } else {
+    media = document.createElement("div");
+    media.className = "thumb";
+    media.textContent = "No media yet";
+    media.style.display = "grid";
+    media.style.placeItems = "center";
   }
 
   const meta = document.createElement("div");
@@ -103,8 +135,21 @@ function openModal(ad) {
     const v = document.createElement("video");
     v.controls = true;
     v.playsInline = true;
+    v.preload = "metadata";
     v.src = ad.video;
     if (ad.poster) v.poster = ad.poster;
+
+    // Helpful: if the video errors, show a message instead of "blank"
+    v.addEventListener("error", () => {
+      const msg = document.createElement("div");
+      msg.style.padding = "16px";
+      msg.textContent =
+        "This video could not be loaded. Please confirm the file exists at: " +
+        ad.video;
+      modalBody.innerHTML = "";
+      modalBody.appendChild(msg);
+    });
+
     modalBody.appendChild(v);
     v.play().catch(() => {});
   } else if (ad.image) {
@@ -135,8 +180,12 @@ function closeModal() {
 }
 
 // Basic escaping for safety
-function escapeHtml(s){
+function escapeHtml(s) {
   return String(s).replace(/[&<>"']/g, (m) => ({
-    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#039;"
   }[m]));
 }
