@@ -14,10 +14,10 @@ const ADS = Array.from({ length: 100 }, (_, i) => {
   return {
     business: `Boca Business #${n}`,
     desc: "Submit your ad to be posted (Free).",
-    // FIX: use slot### naming instead of ad###
+    // Use slot### naming
     video: `media/slot${n}.mp4`,
     poster: `media/slot${n}.jpg`,
-    // image: `media/slot${n}.jpg`, // (use this instead of video/poster for image-only ads)
+    // image: `media/slot${n}.jpg`,
     phone: "",
     website: ""
   };
@@ -26,17 +26,12 @@ const ADS = Array.from({ length: 100 }, (_, i) => {
 // --- DOM ---
 document.getElementById("year").textContent = new Date().getFullYear();
 
-// Hide the top-right email button (since email/mailto was removed),
-// but DO NOT clear the info text line in the page anymore.
+// Hide the top-right email button
 const emailBtn = document.getElementById("emailBtn");
 if (emailBtn) {
   emailBtn.removeAttribute("href");
   emailBtn.style.display = "none";
 }
-
-// IMPORTANT: removed the code that cleared #emailText
-// const emailText = document.getElementById("emailText");
-// if (emailText) emailText.textContent = "";
 
 const grid = document.getElementById("grid");
 const countPill = document.getElementById("countPill");
@@ -136,7 +131,4 @@ function closeModal() {
 
 // Basic escaping for safety
 function escapeHtml(s){
-  return String(s).replace(/[&<>"']/g, (m) => ({
-    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
-  }[m]));
-}
+  return String(s).replace(/[&<>\
