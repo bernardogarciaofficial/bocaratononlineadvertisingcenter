@@ -13,7 +13,7 @@ const ADS = Array.from({ length: 100 }, (_, i) => {
   const n = String(i + 1).padStart(3, "0");
   return {
     business: `Boca Business #${n}`,
-    desc: ",
+    desc: "Submit your ad to be posted (Free).",
     // FIX: use slot### naming instead of ad###
     video: `media/slot${n}.mp4`,
     poster: `media/slot${n}.jpg`,
