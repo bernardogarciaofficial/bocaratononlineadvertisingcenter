@@ -27,7 +27,7 @@ const ADS = Array.from({ length: 100 }, (_, i) => {
   const n = String(i + 1).padStart(3, "0");
   return {
     business: `Boca Business #${n}`,
-    desc: "Submit your ad to be posted (Free).",
+    desc: ",
     video: assetUrl(`media/slot${n}.mp4`),
     poster: assetUrl(`media/slot${n}.jpg`),
     // image: assetUrl(`media/slot${n}.jpg`), // use this instead for image-only ads
@@ -115,9 +115,8 @@ ADS.forEach((ad) => {
   const meta = document.createElement("div");
   meta.className = "meta";
   meta.innerHTML = `
-    <p class="biz">${escapeHtml(ad.business)}</p>
-    <p class="desc">${escapeHtml(ad.desc || "")}</p>
-  `;
+  <p class="biz">${escapeHtml(ad.business)}</p>
+`;
 
   card.appendChild(media);
   card.appendChild(meta);
