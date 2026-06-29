@@ -89,7 +89,7 @@ ADS.forEach(ad => {
 
   card.appendChild(media);
   card.appendChild(meta);
-  card.addEventListener("click", () => openModal(ad));
+  
   grid.appendChild(card);
 });
 
